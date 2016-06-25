@@ -1,0 +1,49 @@
+2016-06-25 07:41:13.781/0.602 Oracle Coherence 12.2.1.1.0 <Info> (thread=main, member=n/a): Loaded operational configuration from "jar:file:/Users/gniu/Oracle/mw12c/coherence/lib/coherence.jar!/tangosol-coherence.xml"
+2016-06-25 07:41:13.852/0.673 Oracle Coherence 12.2.1.1.0 <Info> (thread=main, member=n/a): Loaded operational overrides from "file:/Users/gniu/Workspaces/data-grid-platform/topology/server-override.xml"
+
+Oracle Coherence Version 12.2.1.1.0 Build 63073
+ Grid Edition: Development mode
+Copyright (c) 2000, 2016, Oracle and/or its affiliates. All rights reserved.
+
+2016-06-25 07:41:14.100/0.921 Oracle Coherence GE 12.2.1.1.0 <Info> (thread=main, member=n/a): Loaded cache configuration from "file:/Users/gniu/Workspaces/data-grid-platform/topology/server-cache.xml"
+2016-06-25 07:41:14.615/1.436 Oracle Coherence GE 12.2.1.1.0 <Info> (thread=main, member=n/a): Created cache factory com.tangosol.net.ExtensibleConfigurableCacheFactory
+2016-06-25 07:41:15.002/1.823 Oracle Coherence GE 12.2.1.1.0 <Warning> (thread=main, member=n/a): Local address "127.0.0.1" is a loopback address; this cluster node will not connect to nodes located on different machines
+2016-06-25 07:41:45.907/32.727 Oracle Coherence GE 12.2.1.1.0 <Info> (thread=NameService:TcpAcceptor, member=n/a): TcpAcceptor now listening for connections on gniu-z30:12010.3
+2016-06-25 07:41:45.909/32.729 Oracle Coherence GE 12.2.1.1.0 <Info> (thread=Cluster, member=n/a): NameService now listening for connections on gniu-z30:7574.3
+2016-06-25 07:41:45.910/32.730 Oracle Coherence GE 12.2.1.1.0 <Info> (thread=Cluster, member=n/a): Created a new cluster "mycluster" with Member(Id=1, Timestamp=2016-06-25 07:41:15.152, Address=127.0.0.1:12010, MachineId=15235, Location=site:site01,rack:rack01,machine:node01,process:node01,member:node01, Role=CoherenceServer, Edition=Grid Edition, Mode=Production, CpuCount=4, SocketCount=4)
+2016-06-25 07:41:45.935/32.755 Oracle Coherence GE 12.2.1.1.0 <Info> (thread=main, member=n/a): Started cluster Name=mycluster, ClusterPort=7574
+
+Group{Address=239.192.0.0, TTL=4}
+
+MasterMemberSet(
+  ThisMember=Member(Id=1, Timestamp=2016-06-25 07:41:15.152, Address=127.0.0.1:12010, MachineId=15235, Location=site:site01,rack:rack01,machine:node01,process:node01,member:node01, Role=CoherenceServer)
+  OldestMember=Member(Id=1, Timestamp=2016-06-25 07:41:15.152, Address=127.0.0.1:12010, MachineId=15235, Location=site:site01,rack:rack01,machine:node01,process:node01,member:node01, Role=CoherenceServer)
+  ActualMemberSet=MemberSet(Size=1
+    Member(Id=1, Timestamp=2016-06-25 07:41:15.152, Address=127.0.0.1:12010, MachineId=15235, Location=site:site01,rack:rack01,machine:node01,process:node01,member:node01, Role=CoherenceServer)
+    )
+  MemberId|ServiceJoined|MemberState|Version
+    1|2016-06-25 07:41:15.152|JOINED|12.2.1.1.0
+  RecycleMillis=1200000
+  RecycleSet=MemberSet(Size=0
+    )
+  )
+
+TcpRing{Connections=[]}
+IpMonitor{Addresses=0, Timeout=15s}
+
+2016-06-25 07:41:46.012/32.832 Oracle Coherence GE 12.2.1.1.0 <Info> (thread=main, member=1): Loaded Reporter configuration from "jar:file:/Users/gniu/Oracle/mw12c/coherence/lib/coherence.jar!/reports/report-group.xml"
+2016-06-25 07:41:46.051/32.872 Oracle Coherence GE 12.2.1.1.0 <Info> (thread=main, member=1): JMXConnectorServer now listening for connections on gniu-z30:49231
+2016-06-25 07:41:46.064/32.884 Oracle Coherence GE 12.2.1.1.0 <Info> (thread=main, member=1): Loaded Reporter configuration from "jar:file:/Users/gniu/Oracle/mw12c/coherence/lib/coherence.jar!/reports/report-group.xml"
+2016-06-25 07:41:46.387/33.207 Oracle Coherence GE 12.2.1.1.0 <Info> (thread=Proxy:TcpAcceptor, member=1): TcpAcceptor now listening for connections on gniu-z30:12010.39434
+2016-06-25 07:41:46.401/33.221 Oracle Coherence GE 12.2.1.1.0 <Info> (thread=main, member=1): 
+Services
+  (
+  ClusterService{Name=Cluster, State=(SERVICE_STARTED, STATE_JOINED), Id=0, OldestMemberId=1}
+  TransportService{Name=TransportService, State=(SERVICE_STARTED), Id=1, OldestMemberId=1}
+  InvocationService{Name=Management, State=(SERVICE_STARTED), Id=2, OldestMemberId=1}
+  PartitionedCache{Name=PartitionedCache, State=(SERVICE_STARTED), LocalStorage=enabled, PartitionCount=257, BackupCount=1, AssignedPartitions=257, BackupPartitions=0, CoordinatorId=1}
+  ProxyService{Name=Proxy, State=(SERVICE_STARTED), Id=4, OldestMemberId=1}
+  )
+
+Started DefaultCacheServer...
+
