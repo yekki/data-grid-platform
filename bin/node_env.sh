@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ${DGP_HOME}/sbin/comm_env.sh
+source ${DGP_HOME}/bin/comm_env.sh
 
 if [ "$1" == "" ]; then
 	echo "error: missing node name"
