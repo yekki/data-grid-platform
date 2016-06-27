@@ -8,7 +8,7 @@ DGP_VERBOSE=false
 DGP_CLASSPATH=${COHERENCE_HOME}/lib/coherence.jar
 
 COHERENCE_HOME=/Users/gniu/Oracle/mw12c/coherence
-JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_77.jdk/Contents/Home
+JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home
 
 
 DGP_NODES_HOME=${DGP_HOME}/nodes
@@ -37,12 +37,28 @@ function start_node {
 function stop_node {
 	source ${DGP_HOME}/bin/node_env.sh $1
 
-	ps -ef|grep ${DGP_DATA_PROCESS_NAME} |grep `whoami` | grep ${DGP_NODE_NAME} | grep java | grep -v grep | awk '{print $2}' |while read pid
+	ps -ef|grep ${DGP_DATA_PROCESS_NAME} | grep `whoami` | grep ${DGP_NODE_NAME} | grep java | grep -v grep | awk '{print $2}' | while read pid
 
 	do
 		kill ${pid} 2>&1 >/dev/null
 		echo "${DGP_NODE_NAME}.................[stopped]"
 	done
+}
+
+function status_node {
+	source ${DGP_HOME}/bin/node_env.sh $1
+	_PROCESS_COUNT=0
+	ps -ef |grep ${DGP_DATA_PROCESS_NAME} | grep `whoami` | grep ${DGP_NODE_NAME} | grep java | grep -v grep | awk '{print $2}' | (while read pid
+	do
+        _PROCESS_COUNT=`expr $_PROCESS_COUNT + 1`
+	done
+
+	if [ ${_PROCESS_COUNT} -gt 0 ];
+	then
+        echo "${_PROCESS_COUNT} ${DGP_DATA_PROCESS_NAME} process(es) of ${DGP_NODE_NAME} is/are running."
+	else
+        echo "0 ${DGP_DATA_PROCESS_NAME} process(es) for ${DGP_NODE_NAME} is/are running"
+	fi)
 }
 
 function usage {
