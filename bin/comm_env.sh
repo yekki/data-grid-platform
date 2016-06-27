@@ -20,13 +20,17 @@ function _log {
 	if $DGP_VERBOSE; then echo "* ${1}"; fi
 }
 
+#$1: msg $2:verbose(true:show)
+function _msg {
+
+	if [ ! $2 ]; then echo $1; fi
+}
+
 function start_node {
 	source ${DGP_HOME}/bin/node_env.sh $1
 
-	if $DGP_VERBOSE; then
-		echo "${JAVA_HOME}/bin/java -cp $CLASSPATH -Dcoherence.server.name=${DGP_NODE_NAME} ${JAVA_OPTIONS} com.tangosol.net.DefaultCacheServer"
-	fi
-
+	_msg "${JAVA_HOME}/bin/java -cp $CLASSPATH -Dcoherence.server.name=${DGP_NODE_NAME} ${JAVA_OPTIONS} com.tangosol.net.DefaultCacheServer" DGP_VERBOSE
+	
 	status_node ${DGP_NODE_NAME} false
 	_PC1=$?
 	
@@ -68,11 +72,11 @@ function status_node {
 		_B2=
 		if [[ ${_PROCESS_COUNT} > 1 ]]; then _B1=are; _B2=es; fi
 
-		if [ ! $2 ]; then echo "${_PROCESS_COUNT} ${DGP_DATA_PROCESS_NAME} process${_B2} for ${DGP_NODE_NAME} $_B1 running."; fi
+		_msg "${_PROCESS_COUNT} ${DGP_DATA_PROCESS_NAME} process${_B2} for ${DGP_NODE_NAME} $_B1 running." $2
 
 		return $_PROCESS_COUNT
 	else
-		if [ ! $2 ]; then echo "0 ${DGP_DATA_PROCESS_NAME} process for ${DGP_NODE_NAME} is running"; fi
+		_msg "0 ${DGP_DATA_PROCESS_NAME} process for ${DGP_NODE_NAME} is running" $2
 
 		return 0
 	fi)
