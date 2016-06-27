@@ -21,7 +21,7 @@ do
 			_ACTION="status"
 		;;
 		c)
-			rm -rf ${DGP_NODES_HOME}/logs && mkdir ${DGP_NODES_HOME}/logs && echo "cleanup all logs"
+			_ACTION="cleanup"
 		;;
 		h)  
 			usage
@@ -33,7 +33,7 @@ do
 done
 
 
-if [[ "start stop status" =~ "${_ACTION}" ]]
+if [[ "start stop status cleanup" =~ "${_ACTION}" ]]
 then
 	if [ -n "${_NODE_NAME}" ]
 	then

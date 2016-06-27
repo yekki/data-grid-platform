@@ -55,21 +55,31 @@ function status_node {
 
 	if [ ${_PROCESS_COUNT} -gt 0 ];
 	then
-        echo "${_PROCESS_COUNT} ${DGP_DATA_PROCESS_NAME} process(es) of ${DGP_NODE_NAME} is/are running."
+		_B1=is
+		_B2=
+		if [[ ${_PROCESS_COUNT} > 1 ]]; then _B1=are; _B2=es; fi
+
+        echo "${_PROCESS_COUNT} ${DGP_DATA_PROCESS_NAME} process${_B2} for ${DGP_NODE_NAME} $_B1 running."
 	else
-        echo "0 ${DGP_DATA_PROCESS_NAME} process(es) for ${DGP_NODE_NAME} is/are running"
+        echo "0 ${DGP_DATA_PROCESS_NAME} process for ${DGP_NODE_NAME} is running"
 	fi)
+}
+
+function cleanup_node {
+	source ${DGP_HOME}/bin/node_env.sh $1
+	rm -rf ${DGP_NODES_HOME}/logs/${DGP_NODE_NAME}*.log
 }
 
 function usage {
 
 cat <<EOF
-Usage: $0 [-n node_name] [-s] [-k] [-c]
+Usage: $0 [-n node_name] [-r] [-k] [-c] [-s]
 
 -n: coherence node name, no the option means all nodes
--s: start node(s)
+-r: start node(s)
 -k: stop node(s)
--c: cleanup all logs
+-c: cleanup node(s)
+-s: node(s) status
 EOF
 	exit 0
 }
