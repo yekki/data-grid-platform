@@ -6,22 +6,14 @@ DGP_RUNNING_DATA_NODES=(node01 node02)
 DGP_RUNNING_PROXY_NODES=(proxy1 proxy2)
 DGP_VERBOSE=false
 DGP_CLASSPATH=${COHERENCE_HOME}/lib/coherence.jar
+DGP_COH_TOOL_MEM_ARGS="-Xms128m -Xmx256m"
+
+DGP_DATA_PROCESS_NAME=DefaultCacheServer
 
 COHERENCE_HOME=/Users/gniu/Oracle/mw12c/coherence
 JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home
 
-
-DGP_NODES_HOME=${DGP_HOME}/nodes
-DGP_LIB_HOME=${DGP_HOME}/lib
-DGP_CONFIG_HOME=${DGP_HOME}/config
-DGP_TOPOLOGY_HOME=${DGP_HOME}/topology
-DGP_DATA_PROCESS_NAME=DefaultCacheServer
-
-DGP_NODES_OPTS_FILE=${DGP_CONFIG_HOME}/${DGP_SIDE}-opts.properties
-
 JAVA_OPTIONS="-Djava.net.preferIPv4Stack=true"
-JAVA_MEM_ARGS="-Xms1024m -Xmx1024m -XX:+DisableExplicitGC -XX:+HeapDumpOnOutOfMemoryError -verbosegc -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintHeapAtGC -Xloggc:${SERVERS_HOME}/logs/${SERVER_NAME}_gc.log -XX:HeapDumpPath=${DGP_NODES_HOME}/logs"
-
 
 function _log {
 
@@ -30,7 +22,7 @@ function _log {
 
 function start_node {
 	source ${DGP_HOME}/bin/node_env.sh $1
-	${JAVA_HOME}/bin/java -cp $CLASSPATH -Dcoherence.server.name=${DGP_NODE_NAME} ${JAVA_OPTIONS} com.tangosol.net.DefaultCacheServer  2>&1 | cronolog ${DGP_NODES_HOME}/logs/${DGP_NODE_NAME}-%Y%m%d.log &
+	echo ${JAVA_HOME}/bin/java -cp $CLASSPATH -Dcoherence.server.name=${DGP_NODE_NAME} ${JAVA_OPTIONS} com.tangosol.net.DefaultCacheServer  2>&1 | cronolog ${DGP_HOME}/nodes/logs/${DGP_NODE_NAME}-%Y%m%d.log &
 	echo "${DGP_NODE_NAME}.................[started]"
 }
 
@@ -67,7 +59,18 @@ function status_node {
 
 function cleanup_node {
 	source ${DGP_HOME}/bin/node_env.sh $1
-	rm -rf ${DGP_NODES_HOME}/logs/${DGP_NODE_NAME}*.log
+	rm -rf ${DGP_HOME}/nodes/logs/${DGP_NODE_NAME}*.log
+}
+
+function console {
+	source ${DGP_HOME}/bin/node_env.sh console tools
+	${JAVA_HOME}/bin/java -server -showversion -Xms128m -Xmx256m ${JAVA_OPTIONS} -cp $CLASSPATH com.tangosol.net.CacheFactory
+}
+
+function query {
+
+	source ${DGP_HOME}/bin/node_env.sh query tools
+	${JAVA_HOME}/bin/java -server -showversion -Xms128m -Xmx256m ${JAVA_OPTIONS} -cp $CLASSPATH:${COHERENCE_HOME}/lib/jline.jar com.tangosol.coherence.dslquery.QueryPlus
 }
 
 function usage {
@@ -80,6 +83,8 @@ Usage: $0 [-n node_name] [-r] [-k] [-c] [-s]
 -k: stop node(s)
 -c: cleanup node(s)
 -s: node(s) status
+-a: console tool
+-q: query tool
 EOF
 	exit 0
 }
