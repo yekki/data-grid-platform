@@ -9,7 +9,8 @@ else
     DGP_NODE_NAME=$1
 fi
 
-DGP_NODE_MEM_ARGS="-Xms1024m -Xmx1024m -XX:+DisableExplicitGC -XX:+HeapDumpOnOutOfMemoryError -verbosegc -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintHeapAtGC -Xloggc:${DGP_HOME}/nodes/logs/${DGP_NODE_NAME}_gc.log -XX:HeapDumpPath=${DGP_HOME}/nodes/logs"
+#DGP_NODE_MEM_ARGS="-Xms1024m -Xmx1024m -XX:+DisableExplicitGC -XX:+HeapDumpOnOutOfMemoryError -verbosegc -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+PrintHeapAtGC -Xloggc:${DGP_HOME}/nodes/logs/${DGP_NODE_NAME}_gc.log -XX:HeapDumpPath=${DGP_HOME}/nodes/logs"
+DGP_NODE_MEM_ARGS=
 
 for file in ${DGP_HOME}/lib/*.jar;
 do DGP_CLASSPATH=${DGP_CLASSPATH}:$file;
@@ -33,14 +34,24 @@ then
 fi
 
 JAVA_OPTIONS="${DGP_NODE_MEM_ARGS} ${COHERENCE_OPTIONS} ${JAVA_OPTIONS}"
-
+_log ""
+_log ""
 _log "***************************************************************************"
 _log "DGP_NODE_NAME=${DGP_NODE_NAME}"
+_log ""
 _log "DGP_HOME=${DGP_HOME}"
+_log ""
 _log "DGP_SIDE=${DGP_SIDE}"
+_log ""
 _log "JAVA_HOME=${JAVA_HOME}"
+_log ""
 _log "JAVA_OPTIONS=${JAVA_OPTIONS}"
+_log ""
 _log "COHERENCE_HOME=${COHERENCE_HOME}"
+_log ""
 _log "COHERENCE_OPTIONS=${COHERENCE_OPTIONS}"
+_log ""
 _log "CLASSPATH=${CLASSPATH}"
 _log "***************************************************************************"
+_log ""
+_log ""

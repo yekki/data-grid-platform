@@ -6,7 +6,7 @@ DGP_RUNNING_DATA_NODES=(node01 node02)
 DGP_RUNNING_PROXY_NODES=(proxy1 proxy2)
 DGP_VERBOSE=false
 DGP_CLASSPATH=${COHERENCE_HOME}/lib/coherence.jar
-DGP_COH_TOOL_MEM_ARGS="-Xms128m -Xmx256m"
+DGP_TOOL_MEM_ARGS="-Xms128m -Xmx256m"
 
 DGP_DATA_PROCESS_NAME=DefaultCacheServer
 
@@ -17,13 +17,30 @@ JAVA_OPTIONS="-Djava.net.preferIPv4Stack=true"
 
 function _log {
 
-	if $DGP_VERBOSE; then echo ">>${1}"; fi
+	if $DGP_VERBOSE; then echo "* ${1}"; fi
 }
 
 function start_node {
 	source ${DGP_HOME}/bin/node_env.sh $1
-	echo ${JAVA_HOME}/bin/java -cp $CLASSPATH -Dcoherence.server.name=${DGP_NODE_NAME} ${JAVA_OPTIONS} com.tangosol.net.DefaultCacheServer  2>&1 | cronolog ${DGP_HOME}/nodes/logs/${DGP_NODE_NAME}-%Y%m%d.log &
-	echo "${DGP_NODE_NAME}.................[started]"
+
+	if $DGP_VERBOSE; then
+		echo "${JAVA_HOME}/bin/java -cp $CLASSPATH -Dcoherence.server.name=${DGP_NODE_NAME} ${JAVA_OPTIONS} com.tangosol.net.DefaultCacheServer"
+	fi
+
+	status_node ${DGP_NODE_NAME} false
+	_PC1=$?
+	
+	${JAVA_HOME}/bin/java -cp $CLASSPATH -Dcoherence.server.name=${DGP_NODE_NAME} ${JAVA_OPTIONS} com.tangosol.net.DefaultCacheServer  2>&1 | cronolog ${DGP_HOME}/nodes/logs/${DGP_NODE_NAME}-%Y%m%d.log &
+
+	status_node ${DGP_NODE_NAME} false
+	_PC2=$?
+	
+	if [[ $_PC2 > $_PC1 ]]
+	then
+		echo "${DGP_NODE_NAME}.................[started]"
+	else
+		echo "${DGP_NODE_NAME}.................[failed]"
+	fi
 }
 
 function stop_node {
@@ -36,7 +53,7 @@ function stop_node {
 		echo "${DGP_NODE_NAME}.................[stopped]"
 	done
 }
-
+# $1: node name, $2:verbose(true:show)
 function status_node {
 	source ${DGP_HOME}/bin/node_env.sh $1
 	_PROCESS_COUNT=0
@@ -51,9 +68,13 @@ function status_node {
 		_B2=
 		if [[ ${_PROCESS_COUNT} > 1 ]]; then _B1=are; _B2=es; fi
 
-        echo "${_PROCESS_COUNT} ${DGP_DATA_PROCESS_NAME} process${_B2} for ${DGP_NODE_NAME} $_B1 running."
+		if [ ! $2 ]; then echo "${_PROCESS_COUNT} ${DGP_DATA_PROCESS_NAME} process${_B2} for ${DGP_NODE_NAME} $_B1 running."; fi
+
+		return $_PROCESS_COUNT
 	else
-        echo "0 ${DGP_DATA_PROCESS_NAME} process for ${DGP_NODE_NAME} is running"
+		if [ ! $2 ]; then echo "0 ${DGP_DATA_PROCESS_NAME} process for ${DGP_NODE_NAME} is running"; fi
+
+		return 0
 	fi)
 }
 
@@ -64,13 +85,13 @@ function cleanup_node {
 
 function console {
 	source ${DGP_HOME}/bin/node_env.sh console tools
-	${JAVA_HOME}/bin/java -server -showversion -Xms128m -Xmx256m ${JAVA_OPTIONS} -cp $CLASSPATH com.tangosol.net.CacheFactory
+	${JAVA_HOME}/bin/java -server -showversion ${DGP_TOOL_MEM_ARGS} ${JAVA_OPTIONS} -cp $CLASSPATH com.tangosol.net.CacheFactory
 }
 
 function query {
 
 	source ${DGP_HOME}/bin/node_env.sh query tools
-	${JAVA_HOME}/bin/java -server -showversion -Xms128m -Xmx256m ${JAVA_OPTIONS} -cp $CLASSPATH:${COHERENCE_HOME}/lib/jline.jar com.tangosol.coherence.dslquery.QueryPlus
+	${JAVA_HOME}/bin/java -server -showversion ${DGP_TOOL_MEM_ARGS} ${JAVA_OPTIONS} -cp $CLASSPATH:${COHERENCE_HOME}/lib/jline.jar com.tangosol.coherence.dslquery.QueryPlus
 }
 
 function usage {
