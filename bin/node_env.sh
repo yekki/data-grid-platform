@@ -18,30 +18,40 @@ done
 
 CLASSPATH="${DGP_HOME}/topology:${DGP_HOME}/config:${DGP_CLASSPATH}"
 
-if [ "$2" != "" ]; then DGP_SIDE="$2"; fi
+if [ "$2" != "" ]; then DGP_NODE_TYPE="$2"; fi
 
-DGP_NODES_OPTS_FILE="${DGP_HOME}/config/${DGP_SIDE}-opts.properties"
+DGP_NODES_OPTS_FILE="${DGP_HOME}/nodes/config/${DGP_NODE_TYPE}-opts.properties"
+DGP_NODES_COMMON_OPTS_FILE="${DGP_HOME}/nodes/config/common-opts.properties"
 
-if [ -f $DGP_NODES_OPTS_FILE ]
+if [ -f ${DGP_NODES_COMMON_OPTS_FILE} ]
+then
+	COHERENCE_OPTIONS=`awk '/^'"common"'/{len=length("'common'");ops=ops" -D"substr($0,len+2)} END {print ops}' $DGP_NODES_COMMON_OPTS_FILE`
+fi
+
+if [ -f ${DGP_NODES_OPTS_FILE} ]
 then
 	COHERENCE_OPTIONS=`awk '/^'"$1"'/{len=length("'$1'");ops=ops" -D"substr($0,len+2)} END {print ops}' $DGP_NODES_OPTS_FILE`
 fi
 
-if [[ $COHERENCE_OPTIONS = "" ]] 
+COHERENCE_OPTIONS=`echo $COHERENCE_OPTIONS | xargs -n1 | sort -u | xargs`
+
+if [[ "${COHERENCE_OPTIONS}" = "" ]] 
 then
 	echo "error: coherence node ${DGP_NODE_NAME} launch options is empty!"
 	exit 1
 fi
 
 JAVA_OPTIONS="${DGP_NODE_MEM_ARGS} ${COHERENCE_OPTIONS} ${JAVA_OPTIONS}"
+
+function verbose {
 _log ""
 _log ""
 _log "***************************************************************************"
-_log "DGP_NODE_NAME=${DGP_NODE_NAME}"
-_log ""
 _log "DGP_HOME=${DGP_HOME}"
 _log ""
-_log "DGP_SIDE=${DGP_SIDE}"
+_log "DGP_NODE_NAME=${DGP_NODE_NAME}"
+_log ""
+_log "DGP_NODE_TYPE=${DGP_NODE_TYPE}"
 _log ""
 _log "JAVA_HOME=${JAVA_HOME}"
 _log ""
@@ -55,3 +65,4 @@ _log "CLASSPATH=${CLASSPATH}"
 _log "***************************************************************************"
 _log ""
 _log ""
+}

@@ -5,7 +5,7 @@ source ./bin/comm_env.sh
 _NODE_NAME=
 _ACTION=
 
-while getopts "n:arskhcq" arg  
+while getopts "n:arskhcqj" arg  
 do
 	case $arg in  
 		n)  
@@ -29,6 +29,9 @@ do
 		q)
 			_ACTION="query"
 		;;
+		j)
+			_ACTION="jmx"
+		;;
 		h)  
 			usage
 		;;
@@ -39,15 +42,15 @@ do
 done
 
 
-if [[ "start stop status cleanup console query" =~ "${_ACTION}" ]]
+if [[ "start stop status cleanup console query jmx" =~ "${_ACTION}" ]]
 then
 	if [ -n "${_NODE_NAME}" ]
 	then
 		${_ACTION}_node $_NODE_NAME
 	else
-		if [[ "query console" =~ "${_ACTION}" ]]; then ${_ACTION}; exit 0; fi
+		if [[ "query console jmx" =~ "${_ACTION}" ]]; then ${_ACTION}; exit 0; fi
 					
-		for dn in ${DGP_RUNNING_DATA_NODES[@]}; do
+		for dn in ${DGP_RUNNING_NODES[@]}; do
 			${_ACTION}_node $dn
 		done
 	fi
