@@ -1,5 +1,5 @@
-#!/bin/bash  
-
+#!/usr/bin/env bash
+ 
 source ./bin/comm_env.sh
 
 _NODE_NAME=
@@ -11,29 +11,8 @@ do
 		n)  
 			_NODE_NAME=$OPTARG
 		;;
-		r)  
-			_ACTION="start"
-		;;
-		k)
-			_ACTION="stop" 
-		;;
-		s)
-			_ACTION="status"
-		;;
-		c)
-			_ACTION="cleanup"
-		;;
-		a)
-			_ACTION="console"
-		;;
-		q)
-			_ACTION="query"
-		;;
-		j)
-			_ACTION="jmx"
-		;;
-		h)  
-			usage
+		r | k | s | c | a | q | h | j)  
+			_ACTION=$arg
 		;;
 		*)
 			usage
@@ -41,17 +20,16 @@ do
 	esac
 done
 
-
-if [[ "start stop status cleanup console query jmx" =~ "${_ACTION}" ]]
+if [[ "s k r c a q j h" =~ "${_ACTION}" ]]
 then
 	if [ -n "${_NODE_NAME}" ]
 	then
-		${_ACTION}_node $_NODE_NAME
+		"${GDP_COMMANDS[${_ACTION}]}" $_NODE_NAME
 	else
-		if [[ "query console jmx" =~ "${_ACTION}" ]]; then ${_ACTION}; exit 0; fi
+		if [[ "q a j h" =~ "${_ACTION}" ]]; then "${GDP_COMMANDS[${_ACTION}]}"; exit 0; fi
 					
 		for dn in ${DGP_RUNNING_NODES[@]}; do
-			${_ACTION}_node $dn
+			"${GDP_COMMANDS[${_ACTION}]}" $dn
 		done
 	fi
 fi
