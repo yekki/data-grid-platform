@@ -5,11 +5,11 @@
 DGP_HOME=/Users/gniu/Workspaces/data-grid-platform
 DGP_NODE_TYPE=nodes
 DGP_RUNNING_NODES=(node01 node02 mgmt)
-DGP_VERBOSE=false
-GDP_DEBUG=false
+DGP_VERBOSE=true
 DGP_CLASSPATH=$COHERENCE_HOME/lib/coherence.jar
 DGP_TOOL_MEM_ARGS="-Xms128m -Xmx256m"
 DGP_PROCESS_NAME=DefaultCacheServer
+DGP_MEM_ARGS_OVERRIDE=
 
 COHERENCE_HOME=/Users/gniu/Oracle/mw12c/coherence
 JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home
@@ -17,7 +17,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home
 JAVA_OPTIONS="-Djava.net.preferIPv4Stack=true"
 
 ####################### commands ########################
-
+# following syntax only supported by bash 4.x
 declare -A GDP_COMMANDS=( ["h"]="usage" ["q"]="query" ["c"]="cleanup_node" ["a"]="console" ["j"]="jmx" ["r"]="start_node" ["s"]="status_node"  ["k"]="stop_node" )
 
 ####################### functions ########################
